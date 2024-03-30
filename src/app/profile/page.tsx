@@ -1,11 +1,30 @@
-'use client';
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const ProfilePage = () => {
   const router = useRouter();
+  const [userData, setUserData] = useState()
+
+  const getUserDetails = async () => {
+    try {
+      const res = await axios.get("/api/users/userDetails");
+
+      if (res.status === 200 && res.data?.user?._id) {
+        console.log(res.data.user._id);
+      } else {
+        throw new Error(`Failed to get user details: ${res.data.error}`);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("An unknown error occurred.");
+      }
+    }
+  };
 
   const logout = async () => {
     try {
